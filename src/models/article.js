@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
+let Schema = mongoose.Schema;
 
-var ArticleSchema = new Schema({
+let ArticleSchema = new Schema({
 
     title: String,
     date: {type: Date, default: Date.now},

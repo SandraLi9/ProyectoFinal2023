@@ -1,21 +1,22 @@
 const { model } = require('mongoose');
-var Article = require('../models/article');
+let Article = require('../models/article');
 
 //Creamos un objeto para disponer de todos los metodos de ruta que vamos a definir
 
-var controller = {
+let controller = {
 
     //Este metodo es para guardar un dato
     save: (req, res) => {
-        var params = req.body;
+        let params = req.body;
 
-        var article = new Article();
+        let article = new Article();
         // se asignan los valores
         article.title = params.title;
         article.content = params.content;
         article.author = params.author;
         //se guarda el articulo
-        article.save((err, articleStored) => {
+        article.save().then((articleStored, err) => {
+            console.log("Datos", err, articleStored);
             if (err || !articleStored) {
                 return res.status(404).send({
                     status: 'error',
@@ -31,53 +32,53 @@ var controller = {
     },
     //este metodo es para que los articulos queden en una lista
     getArticles: (req, res) => {
-        var query = Article.find({});
-        query.sort('-date').exec((err, articles) => {
-
-            if (err) {
+        Article.find().sort('-date').exec()
+            .then(articles => {
+                if (!articles || articles.length === 0) {
+                    return res.status(404).send({
+                        status: 'error',
+                        message: 'No hay notas para mostrar'
+                    });
+                }
+                return res.status(200).send({
+                    status: 'success',
+                    articles
+                });
+            })
+            .catch(err => {
                 return res.status(500).send({
                     status: 'error',
-                    message: 'Error al extraer los datos'
+                    message: 'Error al extraer los datos',
+                    error: err
                 });
-            }
-            if (!articles) {
-                return res.status(404).send({
-                    status: 'error',
-                    message: 'No hay notas para mostrar'
-                });
-            }
-            return res.status(200).send({
-                status: 'succes',
-                articles
             });
-        });
-
     },
     //metodo para eliminar una nota
     delete: (req, res) => {
-        //Recoger el Id por medio de la url 
-        var articleId = req.params.id;
-
-        Article.findOneAndDelete({ _id: articleId }, (err, articleRemove) => {
-
-            if (err) {
+        // Recoger el ID a través de la URL
+        let articleId = req.params.id;
+    
+        Article.findOneAndDelete({ _id: articleId })
+            .then(articleRemove => {
+                if (!articleRemove) {
+                    return res.status(404).send({
+                        status: 'error',
+                        message: 'No se ha encontrado la nota a eliminar'
+                    });
+                }
+                return res.status(200).send({
+                    status: 'success',
+                    article: articleRemove
+                });
+            })
+            .catch(err => {
                 return res.status(500).send({
                     status: 'error',
-                    message: 'Error al eliminar la nota'
-                })
-            }
-            if (!articleRemove) {
-                return res.status(404).send({
-                    status: 'error',
-                    message: 'No se ha encontrado la nota a eliminar'
+                    message: 'Error al eliminar la nota',
+                    error: err
                 });
-            }
-            return res.status(200).send({
-                status: 'succes',
-                article: articleRemove
             });
-        });
-    }
-}
+    }}
+    
 
 module.exports = controller;

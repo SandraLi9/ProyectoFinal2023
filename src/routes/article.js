@@ -1,9 +1,9 @@
-var express = require('express');
-var Article = require('../controllers/article');
+let express = require('express');
+let Article = require('../controllers/article');
 const article = require('../models/article');
 
 //Llamamos al objeto router de express
-var router = express.Router();
+let router = express.Router();
 
 //Rutas para los articulos
 

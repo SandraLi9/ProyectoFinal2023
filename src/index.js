@@ -8,11 +8,11 @@ const app = express();
 
 const port = 3900;
 
-var url = 'mongodb+srv://vivianarm0818:nMd9jjFbLSfo8VoY@cluster0.dqbshiq.mongodb.net/?retryWrites=true&w=majority';
+let url = 'mongodb+srv://vivianarm0818:nMd9jjFbLSfo8VoY@cluster0.dqbshiq.mongodb.net/?retryWrites=true&w=majority';
 
 mongoose.Promise = global.Promise;
 
-var article_routes = require('./routes/article');
+let article_routes = require('./routes/article');
 
 //Aqui cargué un body parser, para analizar cuerpos por medio de una url
 
