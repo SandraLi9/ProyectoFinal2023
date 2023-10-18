@@ -4,7 +4,7 @@ import logo from '../assets/images/logo.svg';
 
  
 
-const Header = () => {
+const header = () => {
     return (
 <nav id="navbar" className="navbar navbar-expand-lg navbar-dark bg-dark">
 <div className="container">
@@ -29,4 +29,4 @@ const Header = () => {
 
  
 
-export default Header;
+export default header;
